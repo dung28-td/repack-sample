@@ -26,6 +26,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+const LocalChunk = React.lazy(() => import(/* webpackChunkName: "localChunk" */ './LocalChunk'))
+const RemoteChunk = React.lazy(() => import(/* webpackChunkName: "remoteChunk" */ './RemoteChunk'))
+
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 const Section = ({children, title}): Node => {
@@ -71,6 +74,12 @@ const App: () => Node = () => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <React.Suspense fallback={<Text>Loading...</Text>}>
+          <LocalChunk />
+        </React.Suspense>
+        <React.Suspense fallback={<Text>Loading...</Text>}>
+          <RemoteChunk />
+        </React.Suspense>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
