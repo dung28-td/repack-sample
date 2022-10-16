@@ -17,8 +17,7 @@ const uploadBundle = (file, destination) => {
 
   return bucket.upload(file, {
     gzip: true,
-    destination,
-    public: true
+    destination
   })
     .then(() => console.log(`Upload file "${file}" successfully!`))
     .catch(err => console.error(`Failed to upload file "${file}"`, err))
