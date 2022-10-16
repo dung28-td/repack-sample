@@ -12,20 +12,26 @@ initializeApp({
 const bucket = getStorage().bucket();
 const version = process.env.GITHUB_REF_NAME
 
+const uploadBundle = (file, destination) => {
+  console.log("Start upload", file)
+
+  return bucket.upload(file, {
+    gzip: true,
+    destination,
+    public: true
+  })
+    .then(() => console.log(`Upload file "${file}" successfully!`))
+    .catch(err => console.error(`Failed to upload file "${file}"`, err))
+}
+
 const uploadBundles = platform => {
   const dir = `build/output/${platform}/remote`
 
   return Promise.all(readdirSync(dir).map(filename => {
     const file = `${dir}/${filename}`
+    const destination = `${version}/${platform}/${filename}`
 
-    console.log("Start upload", file)
-
-    return bucket.upload(file, {
-      gzip: true,
-      destination: `${version}/${platform}/${filename}`
-    })
-      .then(() => console.log(`Upload file "${file}" successfully!`))
-      .catch(err => console.error(`Failed to upload file "${file}"`, err))
+    return uploadBundle(file, destination)
   }))
 }
 
