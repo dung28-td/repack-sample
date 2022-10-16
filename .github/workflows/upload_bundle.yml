@@ -1,0 +1,26 @@
+name: Upload app's bundles
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        cache: 'yarn'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Bundle app
+      run: yarn bundle
+    - name: Decrypt secret
+      run: ./scripts/decrypt_secret.sh
+      env:
+        FIREBASE_SECRET_PASSPHRASE: ${{ secrets.FIREBASE_SECRET_PASSPHRASE }}
+    - name: Upload bundles to Firebase storage
+      run: yarn upload:bundle

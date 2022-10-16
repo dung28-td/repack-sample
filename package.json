@@ -8,9 +8,11 @@
     "start": "react-native webpack-start",
     "bundle:android": "react-native webpack-bundle --platform android --entry-file index.js",
     "bundle:ios": "react-native webpack-bundle --platform ios --entry-file index.js",
+    "bundle": "yarn bundle:android && yarn bundle:ios",
     "test": "jest",
     "lint": "eslint .",
-    "release:android": "react-native run-android --variant release"
+    "release:android": "react-native run-android --variant release",
+    "upload:bundle": "node scripts/upload_bundle.js"
   },
   "dependencies": {
     "react": "18.1.0",
@@ -24,6 +26,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.5",
     "eslint": "^7.32.0",
+    "firebase-admin": "^11.1.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
     "react-test-renderer": "18.1.0",
