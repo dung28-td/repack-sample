@@ -35,12 +35,13 @@ const uploadBundles = platform => {
   }))
 }
 
-const main = () => {
+const main = async () => {
   console.log('Start upload bundles')
 
-  return Promise.all(uploadBundles('ios'), uploadBundles('android'))
-    .then(() => console.log("Upload bundles successfully!"))
-    .catch(err => console.error("Failed to upload bundles.", err))
+  await uploadBundles('ios'),
+  await uploadBundles('android')
+
+  console.log("Upload bundles successfully!")
 }
 
 main()
