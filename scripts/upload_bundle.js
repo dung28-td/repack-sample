@@ -1,5 +1,6 @@
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getStorage } = require('firebase-admin/storage');
+const { getFirestore } = require('firebase-admin/firestore')
 const { readdirSync } = require('fs');
 
 const serviceAccount = require('../secrets/firebase_sak.json');
@@ -10,6 +11,8 @@ initializeApp({
 });
 
 const bucket = getStorage().bucket();
+const db = getFirestore();
+
 const version = process.env.GITHUB_REF_NAME
 
 const uploadBundle = (file, destination) => {
@@ -41,11 +44,12 @@ const uploadBundles = platform => {
 
 const main = async () => {
   console.log('Start upload bundles')
-
   await uploadBundles('ios'),
   await uploadBundles('android')
-
   console.log("Upload bundles successfully!")
+
+  console.log("Updating app version ...")
+  await db.doc('settings/appConfig').update({ version })
 }
 
 main()
